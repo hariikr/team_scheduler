@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'user_model.dart';
 
 class TaskModel extends Equatable {
   final String id;
@@ -8,6 +9,7 @@ class TaskModel extends Equatable {
   final DateTime? startTime;
   final DateTime? endTime;
   final DateTime createdAt;
+  final List<UserModel>? collaborators;
 
   const TaskModel({
     required this.id,
@@ -17,9 +19,17 @@ class TaskModel extends Equatable {
     this.startTime,
     this.endTime,
     required this.createdAt,
+    this.collaborators,
   });
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
+    List<UserModel>? collaborators;
+    if (json['task_collaborators'] != null) {
+      collaborators = (json['task_collaborators'] as List)
+          .map((collab) => UserModel.fromJson(collab['users']))
+          .toList();
+    }
+
     return TaskModel(
       id: json['id'].toString(),
       title: json['title'] as String,
@@ -32,6 +42,7 @@ class TaskModel extends Equatable {
           ? DateTime.parse(json['end_time'] as String)
           : null,
       createdAt: DateTime.parse(json['created_at'] as String),
+      collaborators: collaborators,
     );
   }
 
@@ -55,6 +66,7 @@ class TaskModel extends Equatable {
     DateTime? startTime,
     DateTime? endTime,
     DateTime? createdAt,
+    List<UserModel>? collaborators,
   }) {
     return TaskModel(
       id: id ?? this.id,
@@ -64,7 +76,15 @@ class TaskModel extends Equatable {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       createdAt: createdAt ?? this.createdAt,
+      collaborators: collaborators ?? this.collaborators,
     );
+  }
+
+  int get durationInMinutes {
+    if (startTime != null && endTime != null) {
+      return endTime!.difference(startTime!).inMinutes;
+    }
+    return 0;
   }
 
   @override
@@ -76,5 +96,6 @@ class TaskModel extends Equatable {
         startTime,
         endTime,
         createdAt,
+        collaborators,
       ];
 }

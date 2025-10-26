@@ -14,7 +14,7 @@ class TaskService {
     try {
       final response = await _supabase
           .from('tasks')
-          .select()
+          .select('*, task_collaborators(users(*))')
           .order('created_at', ascending: false);
 
       return (response as List)
@@ -22,6 +22,40 @@ class TaskService {
           .toList();
     } catch (e) {
       throw Exception('Failed to fetch tasks: $e');
+    }
+  }
+
+  /// Fetch tasks where the user is a collaborator
+  Future<List<TaskModel>> fetchTasksForCollaborator(String userId) async {
+    try {
+      final response = await _supabase
+          .from('tasks')
+          .select('*, task_collaborators!inner(users(*))')
+          .eq('task_collaborators.user_id', userId)
+          .order('created_at', ascending: false);
+
+      return (response as List)
+          .map((json) => TaskModel.fromJson(json))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch collaborator tasks: $e');
+    }
+  }
+
+  /// Fetch tasks created by the user
+  Future<List<TaskModel>> fetchTasksCreatedBy(String userId) async {
+    try {
+      final response = await _supabase
+          .from('tasks')
+          .select('*, task_collaborators(users(*))')
+          .eq('created_by', userId)
+          .order('created_at', ascending: false);
+
+      return (response as List)
+          .map((json) => TaskModel.fromJson(json))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch created tasks: $e');
     }
   }
 

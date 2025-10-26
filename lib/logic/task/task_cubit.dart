@@ -21,6 +21,28 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
+  /// Load tasks where the user is a collaborator
+  Future<void> loadTasksForCollaborator(String userId) async {
+    try {
+      emit(TaskLoading());
+      final tasks = await _taskService.fetchTasksForCollaborator(userId);
+      emit(TaskListLoaded(tasks));
+    } catch (e) {
+      emit(TaskError(e.toString()));
+    }
+  }
+
+  /// Load tasks created by the user
+  Future<void> loadTasksCreatedBy(String userId) async {
+    try {
+      emit(TaskLoading());
+      final tasks = await _taskService.fetchTasksCreatedBy(userId);
+      emit(TaskListLoaded(tasks));
+    } catch (e) {
+      emit(TaskError(e.toString()));
+    }
+  }
+
   /// Load a specific task with its collaborators
   Future<void> loadTaskDetail(String taskId) async {
     try {
