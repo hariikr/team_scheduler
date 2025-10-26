@@ -12,6 +12,7 @@ import '../../logic/user/user_cubit.dart';
 import '../../logic/user/user_state.dart';
 import '../../data/models/availability_model.dart';
 import '../auth/login_screen.dart';
+import '../task/task_list_screen.dart';
 
 class AvailabilityScreen extends StatelessWidget {
   final String userId;
@@ -46,6 +47,17 @@ class AvailabilityScreen extends StatelessWidget {
 
 class AvailabilityView extends StatelessWidget {
   const AvailabilityView({super.key});
+
+  void _navigateToTaskList(BuildContext context) {
+    // Capture userId before navigation to avoid context issues
+    final userId = context.read<AvailabilityCubit>().userId;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaskListScreen(userId: userId),
+      ),
+    );
+  }
 
   void _showLogoutDialog(BuildContext context) {
     showDialog(
@@ -355,20 +367,14 @@ class AvailabilityView extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         OutlinedButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Task list feature coming soon!'),
-                              ),
-                            );
-                          },
+                          onPressed: () => _navigateToTaskList(context),
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: const Text('Back to Task List'),
+                          child: const Text('View Tasks'),
                         ),
                       ],
                     ),
