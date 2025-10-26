@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../logic/user/user_cubit.dart';
 import '../../logic/user/user_state.dart';
+import '../availability/availability_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -84,7 +85,12 @@ class _OnboardingViewState extends State<OnboardingView> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Welcome, ${state.name}!')),
           );
-          // TODO: Navigate to home screen
+          // Navigate to availability screen
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => AvailabilityScreen(userId: state.userId),
+            ),
+          );
         } else if (state is UserError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

@@ -11,6 +11,27 @@ class UserCubit extends Cubit<UserState> {
 
   UserCubit(this._supabase) : super(const UserInitial());
 
+  Future<void> fetchUser(String userId) async {
+    try {
+      emit(const UserLoading());
+
+      final response =
+          await _supabase.from('users').select().eq('id', userId).single();
+
+      final user = UserModel.fromJson(response);
+
+      emit(UserSuccess(
+        userId: user.id,
+        name: user.name,
+        photoUrl: user.photoUrl,
+      ));
+    } on PostgrestException catch (e) {
+      emit(UserError('Failed to fetch user: ${e.message}'));
+    } catch (e) {
+      emit(UserError('An unexpected error occurred: $e'));
+    }
+  }
+
   Future<void> createUser({
     required String name,
     File? profileImage,
