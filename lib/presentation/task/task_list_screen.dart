@@ -486,7 +486,7 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timeFormat = DateFormat('HH:mm');
+    final timeFormat = DateFormat('h:mm a');
     final dateFormat = DateFormat('MMM dd, yyyy');
     final bool isScheduled = task.startTime != null && task.endTime != null;
 
@@ -775,7 +775,7 @@ class TaskCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${DateFormat('MMM dd, yyyy HH:mm').format(task.startTime!)} - ${DateFormat('HH:mm').format(task.endTime!)}',
+                  '${DateFormat('MMM dd, yyyy h:mm a').format(task.startTime!)} - ${DateFormat('h:mm a').format(task.endTime!)}',
                 ),
                 const SizedBox(height: 16),
               ],

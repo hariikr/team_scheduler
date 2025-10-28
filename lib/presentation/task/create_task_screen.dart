@@ -427,7 +427,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             itemBuilder: (context, index) {
               final slot = _availableSlots[index];
               final isSelected = _selectedSlot == slot;
-              final timeFormat = DateFormat('HH:mm');
+              final timeFormat = DateFormat('h:mm a');
               final dateFormat = DateFormat('EEE, MMM dd');
 
               return Card(

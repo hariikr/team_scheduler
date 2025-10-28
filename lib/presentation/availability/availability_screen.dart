@@ -401,7 +401,7 @@ class AvailabilitySlotCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final timeFormat = DateFormat('HH:mm');
+    final timeFormat = DateFormat('h:mm a');
     final dateFormat = DateFormat('MMM dd, yyyy');
 
     return Card(
