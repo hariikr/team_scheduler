@@ -333,6 +333,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               onChanged: (value) {
                 setState(() {
                   _selectedDurationMinutes = value!;
+                  // Clear previously selected slot when duration changes
+                  _selectedSlot = null;
                 });
               },
               title: Text(
@@ -592,6 +594,12 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   void _goToNextStep(BuildContext context) {
     if (_currentStep == 1) {
       // After selecting collaborators, load available slots
+      context.read<TaskCubit>().findAvailableSlots(
+            userIds: _selectedCollaboratorIds.toList(),
+            durationMinutes: _selectedDurationMinutes,
+          );
+    } else if (_currentStep == 2) {
+      // After selecting duration, recalculate available slots
       context.read<TaskCubit>().findAvailableSlots(
             userIds: _selectedCollaboratorIds.toList(),
             durationMinutes: _selectedDurationMinutes,
